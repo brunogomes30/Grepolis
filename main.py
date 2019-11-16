@@ -17,7 +17,8 @@ def grepolis_bot():
     driver.get("https://pt.grepolis.com")
     
     #list = ["#farm_town_258","#farm_town_254","#farm_town_255","#farm_town_256"]
-    farm_town = "#farm_town_254"
+    #farm_town = "#farm_town_254"
+    
     try:
         #driver = webdriver.Chrome("webdriver\\chromedriver.exe") #options=chrome_options
         #driver.get("https://pt.grepolis.com")
@@ -41,7 +42,8 @@ def grepolis_bot():
             driver.find_element_by_css_selector(".btn_wnd.close").click()
             time.sleep(2)
         """
-        driver.find_element_by_css_selector(farm_town).click()
+        farm_town = driver.find_elements_by_css_selector(".owned.farm_town")[0]
+        farm_town.click()
         time.sleep(2)
         
         farm_name = driver.find_element_by_css_selector(".village_info > .village_name").text
