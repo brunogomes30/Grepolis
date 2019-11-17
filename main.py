@@ -32,6 +32,48 @@ def grepolis_bot():
         world_box.click()
         time.sleep(2)
         #driver.find_element_by_css_selector(".pointer").click()
+        
+        #Recompensa diaria
+        if(len(driver.find_elements_by_css_selector(".daily_login_wrapper")) > 0 ):
+            driver.find_element_by_css_selector(".wnd_border_t > .buttons_container > .close").click()
+        #Autocompletar edificio se disponivel
+        if(len(driver.find_elements_by_css_selector(".type_instant_buy.type_free")) > 0 ):
+            driver.find_element_by_css_selector(".type_instant_buy.type_free > .js-caption").click()
+        #Ver recursos
+        wood =  int(driver.find_element_by_css_selector(".ui_resources_bar > .wood > .wrapper > .amount").text)
+        stone =  int(driver.find_element_by_css_selector(".ui_resources_bar > .stone > .wrapper > .amount").text)
+        silver =  int(driver.find_element_by_css_selector(".ui_resources_bar > .iron > .wrapper > .amount").text)
+        population =  int(driver.find_element_by_css_selector(".ui_resources_bar > .population > .wrapper > .amount").text)
+        storage = 7321
+        if wood > storage*0.9 or stone > storage*0.9 or silver > storage*0.9:
+            arrows = driver.find_elements_by_css_selector(".construction_overlay_frame_instant_buy")
+            for element in arrows:
+                driver.execute_script("arguments[0].style.visibility='hidden'", element)
+            if population <= 5:
+                #Level Farm
+                if(len(driver.find_elements_by_css_selector(".construction_queue_sprite > .farm")) > 0):
+                    print("Already leveling up farm")
+                else:
+                    driver.find_element_by_id("building_main_area_main").click()
+                    time.sleep(1.5)
+                    try:
+                        driver.find_element_by_css_selector("#building_main_farm > .building > .build_up").click()
+                    except Exception:
+                        pass
+                    driver.find_element_by_css_selector(".ui-dialog-titlebar-close").click()
+            else:
+                #Recruit Units
+                
+                #driver.find_element_by_css_selector("div[data-id='barracks']").click()
+                driver.find_element_by_id("building_main_area_barracks").click() #ui_box > div.ui_city_overview.night > div > div > div.viewport.js-city-construction-overlay-viewport > div > div.construction_overlay_frame_instant_buy.barracks.single > div.arrow
+                time.sleep(1.5)
+                unit_count = driver.find_element_by_id("unit_order_input")
+                unit_count.clear()
+                unit_count.send_keys("2")
+                driver.find_element_by_id("unit_order_confirm").click()
+                driver.find_element_by_css_selector(".ui-dialog-titlebar-close").click()
+                
+            
         driver.find_element_by_css_selector(".island_view.option").click()
         time.sleep(2)
         """for i in list:
@@ -55,7 +97,7 @@ def grepolis_bot():
         time.sleep(2)
         #Enquanto não tiver percorrido as aldeias todas, recolhe os recursos
         while(driver.find_element_by_css_selector(".village_info > .village_name").text != farm_name):
-            time.sleep(1)
+            time.sleep(1.5)
             try:
                 driver.find_element_by_css_selector(".action_card:nth-child(1) > .card_click_area").click()
             except:
