@@ -36,9 +36,31 @@ def grepolis_bot():
         #Recompensa diaria
         if(len(driver.find_elements_by_css_selector(".daily_login_wrapper")) > 0 ):
             driver.find_element_by_css_selector(".wnd_border_t > .buttons_container > .close").click()
+		#Close Window
+		
+        try:
+            driver.find_element_by_css_selector(".buttons_container > .close").click()
+        except:
+            pass
+		
         #Autocompletar edificio se disponivel
         if(len(driver.find_elements_by_css_selector(".type_instant_buy.type_free")) > 0 ):
             driver.find_element_by_css_selector(".type_instant_buy.type_free > .js-caption").click()
+        arrows = driver.find_elements_by_css_selector(".construction_overlay_frame_instant_buy")
+        for element in arrows:
+            driver.execute_script("arguments[0].style.visibility='hidden'", element)
+        
+        #Research colonize
+        """
+        driver.find_element_by_id("building_main_area_academy").click()
+        time.sleep(1)
+        try:
+            driver.find_element_by_id(".colonize_ship > .button_upgrade").click()
+        except:
+            pass
+        driver.find_element_by_css_selector(".btn_wnd.close").click()
+        """
+        
         #Ver recursos
         wood =  int(driver.find_element_by_css_selector(".ui_resources_bar > .wood > .wrapper > .amount").text)
         stone =  int(driver.find_element_by_css_selector(".ui_resources_bar > .stone > .wrapper > .amount").text)
@@ -46,9 +68,7 @@ def grepolis_bot():
         population =  int(driver.find_element_by_css_selector(".ui_resources_bar > .population > .wrapper > .amount").text)
         storage = 7321
         if wood > storage*0.9 or stone > storage*0.9 or silver > storage*0.9:
-            arrows = driver.find_elements_by_css_selector(".construction_overlay_frame_instant_buy")
-            for element in arrows:
-                driver.execute_script("arguments[0].style.visibility='hidden'", element)
+            
             if population <= 5:
                 #Level Farm
                 if(len(driver.find_elements_by_css_selector(".construction_queue_sprite > .farm")) > 0):
@@ -70,7 +90,7 @@ def grepolis_bot():
                 unit_count = driver.find_element_by_id("unit_order_input")
                 unit_count.clear()
                 unit_count.send_keys("2")
-                driver.find_element_by_id("unit_order_confirm").click()
+                #driver.find_element_by_id("unit_order_confirm").click()
                 driver.find_element_by_css_selector(".ui-dialog-titlebar-close").click()
                 
             
@@ -91,17 +111,25 @@ def grepolis_bot():
         farm_name = driver.find_element_by_css_selector(".village_info > .village_name").text
         try:
             driver.find_element_by_css_selector(".action_card:nth-child(1) > .card_click_area").click()
+            time.sleep(1)
         except:
             pass
+        if(len(driver.find_elements_by_css_selector(".btn_confirm > .caption")) >0):
+            driver.find_element_by_css_selector(".btn_confirm > .caption.js-caption").click()
+            time.sleep(1)
         driver.find_element_by_css_selector(".btn_next.next_prev").click()
         time.sleep(2)
         #Enquanto não tiver percorrido as aldeias todas, recolhe os recursos
         while(driver.find_element_by_css_selector(".village_info > .village_name").text != farm_name):
-            time.sleep(1.5)
+            time.sleep(2)
             try:
                 driver.find_element_by_css_selector(".action_card:nth-child(1) > .card_click_area").click()
+                time.sleep(1)
             except:
                 pass
+            if(len(driver.find_elements_by_css_selector(".btn_confirm > .caption.js-caption")) >0):
+                driver.find_element_by_css_selector(".btn_confirm > .caption.js-caption").click()
+                time.sleep(1)
             driver.find_element_by_css_selector(".btn_next.next_prev").click()
         
         driver.close() 
