@@ -2,6 +2,7 @@ from threading import Timer
 from selenium import webdriver
 from getpass import getpass
 import selenium
+import datetime
 import time
 from random import randint
    
@@ -15,7 +16,7 @@ def grepolis_bot():
     global username, password
     driver = webdriver.Chrome("webdriver\\chromedriver.exe") #options=chrome_options
     driver.get("https://pt.grepolis.com")
-    
+    print("\nStart: "+str(datetime.datetime.now().hour)+":"+str(datetime.datetime.now().minute))
     
     try:
         username_box = driver.find_element_by_css_selector("#login_userid")
@@ -32,7 +33,6 @@ def grepolis_bot():
         cities = driver.find_elements_by_css_selector(".group_towns > div > .town_group_town")
         driver.find_element_by_css_selector(".town_name_area > .town_groups_dropdown > .js-button-caption").click()
         n_cities = len(cities)
-        print(cities)
         for i in range(n_cities):
             try:
                 #Select city
@@ -128,10 +128,11 @@ def grepolis_bot():
                 
                 
             except Exception as e:
-                print(str(e))
+                #print(str(e))
                 continue
     except Exception as e:
         print(str(e))
+    print("\nFinish: "+str(datetime.datetime.now().hour)+":"+str(datetime.datetime.now().minute))
     driver.close() 
     waiting_time = randint(290,315)
     t = Timer(waiting_time, grepolis_bot)
