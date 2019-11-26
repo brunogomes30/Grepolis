@@ -40,6 +40,7 @@ def grepolis_bot():
                 time.sleep(2)
                 
                 cities = driver.find_elements_by_css_selector(".group_towns > div > .town_group_town")[i].click()
+                time.sleep(1)
                 #Recompensa diaria
                 if(len(driver.find_elements_by_css_selector(".daily_login_wrapper")) > 0 ):
                     driver.find_element_by_css_selector(".wnd_border_t > .buttons_container > .close").click()
@@ -59,12 +60,23 @@ def grepolis_bot():
                 arrows = driver.find_elements_by_css_selector(".construction_overlay_frame_instant_buy")
                 for element in arrows:
                     driver.execute_script("arguments[0].style.visibility='hidden'", element)
-                
-                
+                """
+                driver.find_element_by_id("building_main_area_main").click()
+                time.sleep(1.5)
+                try:
+                    pass
+                    #driver.find_element_by_css_selector("#building_main_main > .building > .build_up").click()
+                except Exception:
+                    pass
+                driver.find_element_by_css_selector(".ui-dialog-titlebar-close").click()
+                time.sleep(1)
+				"""
                 #Ver recursos
                 wood =  int(driver.find_element_by_css_selector(".ui_resources_bar > .wood > .wrapper > .amount").text)
                 stone =  int(driver.find_element_by_css_selector(".ui_resources_bar > .stone > .wrapper > .amount").text)
                 silver =  int(driver.find_element_by_css_selector(".ui_resources_bar > .iron > .wrapper > .amount").text)
+                if wood == stone == silver:
+                    continue
                 population =  int(driver.find_element_by_css_selector(".ui_resources_bar > .population > .wrapper > .amount").text)
                 storage = 7321
                 if wood > storage*0.9 or stone > storage*0.9 or silver > storage*0.9:
@@ -81,36 +93,39 @@ def grepolis_bot():
                             except Exception:
                                 pass
                             driver.find_element_by_css_selector(".ui-dialog-titlebar-close").click()
+
                     else:
                         #Recruit Units
-                        
-                        #driver.find_element_by_css_selector("div[data-id='barracks']").click()
-                        driver.find_element_by_id("building_main_area_barracks").click() #ui_box > div.ui_city_overview.night > div > div > div.viewport.js-city-construction-overlay-viewport > div > div.construction_overlay_frame_instant_buy.barracks.single > div.arrow
+                        pass
+                        """
+                        driver.find_element_by_id("building_main_area_barracks").click() 
                         time.sleep(1.5)
                         unit_count = driver.find_element_by_id("unit_order_input")
                         unit_count.clear()
                         unit_count.send_keys("2")
-                        #driver.find_element_by_id("unit_order_confirm").click()
+                        driver.find_element_by_id("unit_order_confirm").click()
                         driver.find_element_by_css_selector(".ui-dialog-titlebar-close").click()
+                        """
                         
-                    
+                time.sleep(1)
                 driver.find_element_by_css_selector(".island_view.option").click()
                 time.sleep(2)
                 
                 driver.find_element_by_css_selector(".btn_jump_to_town").click()
-                farm_town = driver.find_elements_by_css_selector(".owned.farm_town")[0]
+                time.sleep(1)
+                farm_town = driver.find_elements_by_css_selector(".owned.farm_town[data-same_island='true']")[0]
                 farm_town.click()
-                time.sleep(2)
+                time.sleep(1)
                 
                 farm_name = driver.find_element_by_css_selector(".village_info > .village_name").text
                 try:
                     driver.find_element_by_css_selector(".action_card:nth-child(1) > .card_click_area").click()
-                    time.sleep(1)
+                    time.sleep(1.5)
                 except:
                     pass
                 if(len(driver.find_elements_by_css_selector(".btn_confirm > .caption")) >0):
                     driver.find_element_by_css_selector(".btn_confirm > .caption.js-caption").click()
-                    time.sleep(1)
+                    time.sleep(1.5)
                 driver.find_element_by_css_selector(".btn_next.next_prev").click()
                 time.sleep(2)
                 #Enquanto não tiver percorrido as aldeias todas, recolhe os recursos
@@ -118,17 +133,17 @@ def grepolis_bot():
                     time.sleep(2)
                     try:
                         driver.find_element_by_css_selector(".action_card:nth-child(1) > .card_click_area").click()
-                        time.sleep(1)
+                        time.sleep(2)
                     except:
                         pass
                     if(len(driver.find_elements_by_css_selector(".btn_confirm > .caption.js-caption")) >0):
                         driver.find_element_by_css_selector(".btn_confirm > .caption.js-caption").click()
-                        time.sleep(1)
+                        time.sleep(1.5)
                     driver.find_element_by_css_selector(".btn_next.next_prev").click()
                 
                 
             except Exception as e:
-                #print(str(e))
+                print(str(e))
                 continue
     except Exception as e:
         print(str(e))
