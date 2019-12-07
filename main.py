@@ -28,6 +28,11 @@ def grepolis_bot():
         world_box = driver.find_element_by_css_selector(".world_name.type_wonder")
         world_box.click()
         time.sleep(2)
+        #Is logged in
+        #Check if has captain to collect from farms
+        captain_is_available = len(driver.find_elements_by_css_selector(".captain_active")) > 0
+        
+        
         driver.find_element_by_css_selector(".town_name_area > .town_groups_dropdown > .js-button-caption").click()
         time.sleep(2)
         cities = driver.find_elements_by_css_selector(".group_towns > div > .town_group_town")
@@ -108,38 +113,50 @@ def grepolis_bot():
                         """
                         
                 time.sleep(1)
-                driver.find_element_by_css_selector(".island_view.option").click()
-                time.sleep(2)
-                
-                driver.find_element_by_css_selector(".btn_jump_to_town").click()
-                time.sleep(1)
-                farm_town = driver.find_elements_by_css_selector(".owned.farm_town[data-same_island='true']")[0]
-                farm_town.click()
-                time.sleep(1)
-                
-                farm_name = driver.find_element_by_css_selector(".village_info > .village_name").text
-                try:
-                    driver.find_element_by_css_selector(".action_card:nth-child(1) > .card_click_area").click()
-                    time.sleep(1.5)
-                except:
-                    pass
-                if(len(driver.find_elements_by_css_selector(".btn_confirm > .caption")) >0):
-                    driver.find_element_by_css_selector(".btn_confirm > .caption.js-caption").click()
-                    time.sleep(1.5)
-                driver.find_element_by_css_selector(".btn_next.next_prev").click()
-                time.sleep(2)
-                #Enquanto não tiver percorrido as aldeias todas, recolhe os recursos
-                while(driver.find_element_by_css_selector(".village_info > .village_name").text != farm_name):
+                #Collects from captain if its available
+                if captain_is_available:
+                    driver.find_element_by_css_selector(".toolbar_button.premium > .icon").click()
+                    time.sleep(1)
+                    try:
+                        driver.find_element_by_id("fto_claim_button").click()
+                    except Exception:
+                        pass
+                    driver.find_element_by_css_selector(".ui-dialog-titlebar-close").click()
+                    time.sleep(1)
+                    
+                else:
+                    driver.find_element_by_css_selector(".island_view.option").click()
                     time.sleep(2)
+                    
+                    driver.find_element_by_css_selector(".btn_jump_to_town").click()
+                    time.sleep(1)
+                    farm_town = driver.find_elements_by_css_selector(".owned.farm_town[data-same_island='true']")[0]
+                    farm_town.click()
+                    time.sleep(1)
+                    
+                    farm_name = driver.find_element_by_css_selector(".village_info > .village_name").text
                     try:
                         driver.find_element_by_css_selector(".action_card:nth-child(1) > .card_click_area").click()
-                        time.sleep(2)
+                        time.sleep(1.5)
                     except:
                         pass
-                    if(len(driver.find_elements_by_css_selector(".btn_confirm > .caption.js-caption")) >0):
+                    if(len(driver.find_elements_by_css_selector(".btn_confirm > .caption")) >0):
                         driver.find_element_by_css_selector(".btn_confirm > .caption.js-caption").click()
                         time.sleep(1.5)
                     driver.find_element_by_css_selector(".btn_next.next_prev").click()
+                    time.sleep(2)
+                    #Enquanto não tiver percorrido as aldeias todas, recolhe os recursos
+                    while(driver.find_element_by_css_selector(".village_info > .village_name").text != farm_name):
+                        time.sleep(2)
+                        try:
+                            driver.find_element_by_css_selector(".action_card:nth-child(1) > .card_click_area").click()
+                            time.sleep(2)
+                        except:
+                            pass
+                        if(len(driver.find_elements_by_css_selector(".btn_confirm > .caption.js-caption")) >0):
+                            driver.find_element_by_css_selector(".btn_confirm > .caption.js-caption").click()
+                            time.sleep(1.5)
+                        driver.find_element_by_css_selector(".btn_next.next_prev").click()
                 
                 
             except Exception as e:
