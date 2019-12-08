@@ -1,5 +1,7 @@
 from threading import Timer
 from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
+
 from getpass import getpass
 import selenium
 import datetime
@@ -49,8 +51,8 @@ def grepolis_bot():
                 #Recompensa diaria
                 if(len(driver.find_elements_by_css_selector(".daily_login_wrapper")) > 0 ):
                     driver.find_element_by_css_selector(".wnd_border_t > .buttons_container > .close").click()
-        		#Close Window
-        		
+                #Close Window
+                
                 try:
                     driver.find_element_by_css_selector(".buttons_container > .close").click()
                 except:
@@ -75,7 +77,7 @@ def grepolis_bot():
                     pass
                 driver.find_element_by_css_selector(".ui-dialog-titlebar-close").click()
                 time.sleep(1)
-				"""
+                """
                 #Ver recursos
                 wood =  int(driver.find_element_by_css_selector(".ui_resources_bar > .wood > .wrapper > .amount").text)
                 stone =  int(driver.find_element_by_css_selector(".ui_resources_bar > .stone > .wrapper > .amount").text)
@@ -115,10 +117,16 @@ def grepolis_bot():
                 time.sleep(1)
                 #Collects from captain if its available
                 if captain_is_available:
-                    driver.find_element_by_css_selector(".toolbar_button.premium > .icon").click()
+                    icon = driver.find_element_by_css_selector(".toolbar_button.premium > .icon")
+                    hover = ActionChains(driver).move_to_element(icon)
+                    hover.perform()
+                    driver.find_element_by_name("farm_town_overview").click()
                     time.sleep(1)
                     try:
                         driver.find_element_by_id("fto_claim_button").click()
+                        time.sleep(0.5)
+                        if(len(driver.find_elements_by_css_selector(".btn_confirm > .caption")) >0):
+                            driver.find_element_by_css_selector(".btn_confirm > .caption.js-caption").click()
                     except Exception:
                         pass
                     driver.find_element_by_css_selector(".ui-dialog-titlebar-close").click()
