@@ -16,7 +16,7 @@ username = input("Username: ")
 password =  getpass("Password(Não irá ser vísivel): ")
 def grepolis_bot():
     global username, password
-    driver = webdriver.Chrome("webdriver\\chromedriver.exe") #options=chrome_options
+    driver = webdriver.Chrome("webdriver\\chromedriver.exe", options=chrome_options) #options=chrome_options
     driver.get("https://pt.grepolis.com")
     print("\nStart: "+str(datetime.datetime.now().hour)+":"+str(datetime.datetime.now().minute))
     
@@ -27,7 +27,7 @@ def grepolis_bot():
         password_box.send_keys(password)
         password_box.submit()
         time.sleep(2)
-        world_box = driver.find_element_by_css_selector(".world_name.type_wonder")
+        world_box = driver.find_element_by_css_selector(".world_name.end_game_type_world_wonder")
         world_box.click()
         time.sleep(2)
         #Is logged in
