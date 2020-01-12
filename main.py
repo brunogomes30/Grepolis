@@ -14,8 +14,9 @@ chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument("--headless")
 username = input("Username: ")
 password =  getpass("Password(Não irá ser vísivel): ")
+selected_world = None
 def grepolis_bot():
-    global username, password
+    global username, password, selected_world
     driver = webdriver.Chrome("webdriver\\chromedriver.exe", options=chrome_options) #options=chrome_options
     driver.get("https://pt.grepolis.com")
     print("\nStart: "+str(datetime.datetime.now().hour)+":"+str(datetime.datetime.now().minute))
@@ -27,7 +28,18 @@ def grepolis_bot():
         password_box.send_keys(password)
         password_box.submit()
         time.sleep(2)
-        world_box = driver.find_element_by_css_selector(".world_name.end_game_type_world_wonder")
+        available_worlds = driver.find_elements_by_css_selector(".world_name")
+        if selected_world == None:
+            
+            print("Mundos disponiveis:")
+            for i, x in enumerate(available_worlds):
+                print(i + 1, x.text)
+            print("Escolha um")
+            selected_world = int(input("Mundo: "))
+            while selected_world > len(available_worlds) or selected_world <= 0:
+                selected_world = int(input("Mundo: "))
+        
+        world_box = available_worlds[selected_world - 1]
         world_box.click()
         time.sleep(2)
         #Is logged in
